@@ -319,6 +319,7 @@ ORDER BY 2 DESC
 | Using `TIMESTAMP` keyword | `WHERE block_time > TIMESTAMP '2024-01-01'` | `WHERE block_time > CAST('2024-01-01' AS timestamp)` or use `DATE '2024-01-01'` |
 | Forgetting `GROUP BY` with agg | `SELECT day, COUNT(*) ...` | Add `GROUP BY 1` or `GROUP BY day` |
 | Bigint overflow in arithmetic | `SUM(gas_used * gas_price)` | `SUM(CAST(gas_used AS double) * CAST(gas_price AS double))` — always cast to `double` before multiplying or summing large integer columns (`gas_used`, `gas_price`, `value`, `uint256` fields) to avoid bigint overflow |
+| Inferring identifiers from nearby data | Assuming a token ID range belongs to a project because it appeared in the same table | Always explicitly resolve identifiers (project IDs, pool addresses, token ID ranges) from a table/column that directly maps names to IDs. If the first table lacks the ID, search for other decoded tables that expose it. Never guess from co-located or positional data. |
 
 ---
 
