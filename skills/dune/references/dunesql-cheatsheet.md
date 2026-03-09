@@ -318,6 +318,7 @@ ORDER BY 2 DESC
 | `FROM_HEX` with 0x prefix | `FROM_HEX('0xabc...')` | `FROM_HEX('abc...')` (no 0x) |
 | Using `TIMESTAMP` keyword | `WHERE block_time > TIMESTAMP '2024-01-01'` | `WHERE block_time > CAST('2024-01-01' AS timestamp)` or use `DATE '2024-01-01'` |
 | Forgetting `GROUP BY` with agg | `SELECT day, COUNT(*) ...` | Add `GROUP BY 1` or `GROUP BY day` |
+| Bigint overflow in arithmetic | `SUM(gas_used * gas_price)` | `SUM(CAST(gas_used AS double) * CAST(gas_price AS double))` — always cast to `double` before multiplying or summing large integer columns (`gas_used`, `gas_price`, `value`, `uint256` fields) to avoid bigint overflow |
 
 ---
 

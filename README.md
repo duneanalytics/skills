@@ -16,12 +16,6 @@ Install using the [`npx skills`](https://skills.sh) CLI:
 npx skills add duneanalytics/skills
 ```
 
-### Claude Code
-
-```
-claude skill add duneanalytics/skills
-```
-
 ### Cursor
 
 Add via **Settings > Rules > Add Rule > Remote Rule (Github)** with `duneanalytics/skills`.
