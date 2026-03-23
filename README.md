@@ -38,6 +38,7 @@ Skills are contextual and auto-loaded based on your conversation. When a request
 | Skill | Description |
 |-------|-------------|
 | [dune](skills/dune/) | Query blockchain data, search datasets, manage queries, and monitor usage via the Dune CLI |
+| [sim](skills/sim/) | Real-time blockchain wallet and token lookups via the Dune Sim API (balances, activity, transactions, NFTs, DeFi positions, token holders) |
 
 ## Skill Structure
 
