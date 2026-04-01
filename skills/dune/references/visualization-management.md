@@ -32,11 +32,20 @@ dune viz create --query-id <ID> --name <NAME> --type <TYPE> --options '<JSON>' [
 
 ### Visualization Types
 
-| Type | Description |
-|------|-------------|
-| `chart` | Line, column, area, scatter, or pie (set via `globalSeriesType` in options) |
-| `table` | Tabular data display |
-| `counter` | Single-value counter display |
+| Type | Description | Options documented below? |
+|------|-------------|--------------------------|
+| `chart` | Line, column, area, scatter, or pie (set via `globalSeriesType` in options) | Yes |
+| `table` | Tabular data display | Yes |
+| `counter` | Single-value counter display | Yes |
+| `pivot` | Pivot table | No — option format undocumented |
+| `cohort` | Cohort analysis | No — option format undocumented |
+| `funnel` | Funnel visualization | No — option format undocumented |
+| `choropleth` | Geographic heat map | No — option format undocumented |
+| `sankey` | Flow diagram | No — option format undocumented |
+| `sunburst_sequence` | Hierarchical sunburst | No — option format undocumented |
+| `word_cloud` | Word cloud | No — option format undocumented |
+
+> **Note:** Types marked "undocumented" are accepted by the API but their `--options` format is not yet documented. Stick to `chart`, `table`, and `counter` for reliable results.
 
 ### Output
 
@@ -140,7 +149,8 @@ dune viz create --query-id 12345 --name "Top Wallets" --type table \
 | `yAxis` | `array` | Yes | `[{"title": {"text": "Label"}}]` |
 | `legend` | `object` | No | `{"enabled": true}` |
 | `series` | `object` | No | `{"stacking": null}` or `{"stacking": "stack"}` |
-| `numberFormat` | `string` | No | Numeral.js format for y-axis labels |
+| `numberFormat` | `string` | No | Numeral.js format for left y-axis labels |
+| `numberFormatRightYAxisSeries` | `string` | No | Numeral.js format for right y-axis (line/area only, when using dual y-axis) |
 
 `columnMapping` maps each query column to an axis role:
 - Exactly **one** column mapped to `"x"` (the x-axis)
