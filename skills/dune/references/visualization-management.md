@@ -60,13 +60,15 @@ dune viz create --query-id <ID> --name <NAME> --type <TYPE> --options '<JSON>' [
 >
 > **Visualizations require saved (non-temporary) queries.** When creating a query that will have visualizations, do NOT use `--temp`. Temporary queries are auto-deleted and cannot have visualizations attached.
 
-### Step 1: Discover column names by running the query first
+### Step 1: Run the query first (required for both column discovery AND rendering)
 
 ```bash
 dune query run <query-id> -o json
 ```
 
-Look at `result.metadata.column_names` in the response — these are the **exact** column names you must use in `--options`. Column names are case-sensitive and may be auto-generated (e.g. `SELECT 1` produces `_col0`, not `1`).
+This step is required for **two reasons**:
+1. **Column discovery:** Look at `result.metadata.column_names` in the response — these are the **exact** column names you must use in `--options`. Column names are case-sensitive and may be auto-generated (e.g. `SELECT 1` produces `_col0`, not `1`).
+2. **Rendering:** A visualization will show "No results available" until the query has been executed at least once. The embed page displays results from the latest execution — without one, there's nothing to render.
 
 ### Step 2: Build options using the discovered column names
 
