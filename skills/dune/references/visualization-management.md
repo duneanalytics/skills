@@ -48,6 +48,8 @@ dune viz create --query-id <ID> --name <NAME> --type <TYPE> --options '<JSON>' [
 ## Required Workflow
 
 > **You MUST follow this workflow every time.** Skipping step 1 is the #1 cause of broken visualizations.
+>
+> **Visualizations require saved (non-temporary) queries.** When creating a query that will have visualizations, do NOT use `--temp`. Temporary queries are auto-deleted and cannot have visualizations attached.
 
 ### Step 1: Discover column names by running the query first
 
@@ -194,7 +196,8 @@ Use these in `numberFormat`, `stringPrefix`/`stringSuffix` fields:
 
 ## Common Mistakes
 
-1. **Not running the query first**: You MUST run `dune query run <id> -o json` first to discover actual column names from `result.metadata.column_names`. Never guess column names — `SELECT 1` produces `_col0`, `SELECT count(*) FROM x` produces `_col0`, etc. Only `SELECT x AS my_name` gives predictable names.
+1. **Using a temporary query**: Visualizations only work on saved (non-temp) queries. If you created the query with `--temp`, recreate it without `--temp` before adding a visualization.
+2. **Not running the query first**: You MUST run `dune query run <id> -o json` first to discover actual column names from `result.metadata.column_names`. Never guess column names — `SELECT 1` produces `_col0`, `SELECT count(*) FROM x` produces `_col0`, etc. Only `SELECT x AS my_name` gives predictable names.
 2. **Empty options**: `--options '{}'` always produces a broken visualization that shows errors when opened
 3. **Wrong column names**: Column names in options must match query result columns exactly (case-sensitive)
 4. **Missing columnMapping**: Charts require `columnMapping` with at least one `"x"` and one `"y"` entry
