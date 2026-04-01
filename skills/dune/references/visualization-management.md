@@ -88,6 +88,33 @@ Open the returned URL to confirm it renders correctly.
 
 > **Critical:** The `--options` JSON must match the visualization type. Column names in options must match the actual query result column names exactly. Omitting required fields or using wrong column names produces broken visualizations.
 
+### Minimum Required Templates
+
+Copy the appropriate template, replace `<placeholders>` with actual column names from `result.metadata.column_names`:
+
+**Counter** (minimum):
+```json
+{"counterColName":"<column>","rowNumber":1,"stringDecimal":0}
+```
+
+**Table** (minimum — one entry per column you want to show):
+```json
+{"columns":[{"name":"<column>","title":"<Display Name>","type":"normal","alignContent":"left","isHidden":false}]}
+```
+
+**Line/Column/Area/Scatter chart** (minimum):
+```json
+{"globalSeriesType":"line","sortX":true,"columnMapping":{"<x_column>":"x","<y_column>":"y"},"seriesOptions":{"<y_column>":{"type":"line","yAxis":0,"zIndex":0}},"xAxis":{"title":{"text":"<X Label>"}},"yAxis":[{"title":{"text":"<Y Label>"}}],"legend":{"enabled":true},"series":{"stacking":null}}
+```
+Change `"line"` to `"column"`, `"area"`, or `"scatter"` in both `globalSeriesType` and `seriesOptions[].type`.
+
+**Pie chart** (minimum):
+```json
+{"globalSeriesType":"pie","sortX":true,"columnMapping":{"<category_column>":"x","<value_column>":"y"},"seriesOptions":{"<value_column>":{"type":"pie","yAxis":0,"zIndex":0}}}
+```
+
+---
+
 ### Counter Options
 
 The simplest type — displays a single number from one row of the query results.
