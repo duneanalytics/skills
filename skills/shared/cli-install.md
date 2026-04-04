@@ -54,33 +54,6 @@ Pick the first one that exists on PATH. If none is found, fall back to `$HOME/.l
    dune --help
    ```
 
-**Windows (PowerShell) -- run each step as a separate command:**
-
-1. Only if the chosen directory doesn't exist yet (i.e. using the fallback):
-   ```powershell
-   New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.local\bin"
-   ```
-
-2. Run the installer:
-   ```powershell
-   $env:INSTALL_DIR = "<chosen-dir>"; irm https://github.com/duneanalytics/cli/raw/main/install.ps1 | iex
-   ```
-
-3. Add to PATH for the current session:
-   ```powershell
-   $env:Path = "<chosen-dir>;$env:Path"
-   ```
-
-4. Only if the fallback was used, persist to user PATH:
-   ```powershell
-   [Environment]::SetEnvironmentVariable("Path", "<chosen-dir>;" + [Environment]::GetEnvironmentVariable("Path", "User"), "User")
-   ```
-
-5. Verify:
-   ```powershell
-   dune --help
-   ```
-
 ### Option B -- User-assisted install (fallback)
 
 If Option A fails, ask the user to run the install command themselves in a separate terminal. They can provide `sudo` if needed:
@@ -89,15 +62,6 @@ If Option A fails, ask the user to run the install command themselves in a separ
 ```bash
 curl -sSfL https://github.com/duneanalytics/cli/raw/main/install.sh | bash
 ```
-
-**Windows (PowerShell):**
-```powershell
-irm https://github.com/duneanalytics/cli/raw/main/install.ps1 | iex
-```
-
-> **Security note:** Option B pipes a remote script directly into the shell. This is convenient but means the script is executed without inspection. Option A (downloading first, then running) is safer. If the user has concerns, recommend they download and inspect the script before running it.
-
-Tell the user to come back once the install is complete, then re-check with `command -v dune` (or `Get-Command dune` on Windows).
 
 ---
 
