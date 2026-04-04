@@ -8,7 +8,7 @@ This reference covers CLI installation, Sim API authentication failure recovery,
 
 ## CLI Not Found Recovery
 
-If the command fails because `dune` is not found on PATH (e.g. "command not found"), follow the installation steps in the [shared CLI install reference](../../shared/cli-install.md#cli-not-found-recovery).
+If the command fails because `dune` is not found on PATH (e.g. "command not found"), follow the installation steps in the [shared CLI install reference](cli-install.md#cli-not-found-recovery).
 
 ---
 
@@ -51,7 +51,7 @@ Do **not** attempt to handle the API key yourself -- the user must authenticate 
 
 ## Version Compatibility
 
-See the [shared CLI version compatibility reference](../../shared/cli-install.md#version-compatibility).
+See the [shared CLI version compatibility reference](cli-install.md#version-compatibility).
 
 ---
 
