@@ -1,6 +1,7 @@
 ---
 name: dune
 description: "Dune CLI for querying blockchain and on-chain data via DuneSQL, searching decoded contract tables, managing saved queries, and monitoring credit usage on Dune Analytics. Use when user asks about blockchain data, on-chain analytics, token transfers, DEX trades, smart contract events, wallet balances, Ethereum/EVM chain queries, DuneSQL, or says \"query Dune\", \"search Dune datasets\", or \"run a Dune query\"."
+license: MIT
 compatibility: Requires network access and the Dune CLI (auto-installed on first use). Works on macOS, Linux, and Windows.
 allowed-tools: Bash(dune:*) Bash(curl:*) Read
 metadata:

@@ -1,6 +1,7 @@
 ---
 name: sim
 description: "Dune Sim API for real-time blockchain wallet and token lookups across EVM and SVM chains. Use when user asks about wallet balances, token prices, NFT holdings, DeFi positions, transaction history, wallet activity, token holders, stablecoins, or any real-time on-chain data for a specific address. Triggers: 'check wallet', 'token balance', 'NFT holdings', 'DeFi positions', 'transaction history', 'token holders', 'token price', 'stablecoin balance', 'wallet activity', or any request involving a blockchain address (0x... or Solana base58)."
+license: MIT
 compatibility: Requires network access and the Dune CLI (auto-installed on first use). Works on macOS, Linux, and Windows.
 allowed-tools: Bash(dune:*) Bash(curl:*) Read
 metadata:
