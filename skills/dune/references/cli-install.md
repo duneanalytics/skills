@@ -1,6 +1,6 @@
 # CLI Installation & Version Compatibility
 
-Shared reference for all Dune CLI skills. This covers installing the `dune` binary and handling version mismatches. For authentication-specific recovery, see the install-and-recovery reference in each skill.
+Shared reference for all Dune CLI skills. This covers installing the `dune` binary and handling version mismatches. For authentication-specific recovery, see the install-and-recovery reference.
 
 ---
 

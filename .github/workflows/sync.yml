@@ -1,0 +1,32 @@
+name: Sync CLI install reference
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - skills/shared/cli-install.md
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: |
+          cp skills/shared/cli-install.md skills/dune/references/cli-install.md
+          cp skills/shared/cli-install.md skills/sim/references/cli-install.md
+
+      - run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+          git add skills/dune/references/cli-install.md skills/sim/references/cli-install.md
+
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "sync: copy cli-install.md to dune & sim references"
+            git push
+          fi
