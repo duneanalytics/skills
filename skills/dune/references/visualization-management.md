@@ -47,14 +47,157 @@ dune viz create --query-id <ID> --name <NAME> --type <TYPE> --options '<JSON>' [
 
 > **Note:** Types marked "undocumented" are accepted by the API but their `--options` format is not yet documented. Stick to `chart`, `table`, and `counter` for reliable results.
 
-### Output
-
-- **text**: `Created visualization <id> on query <query_id>\nhttps://dune.com/embeds/<query_id>/<id>`
-- **json**: `{"id": <id>, "url": "https://dune.com/embeds/<query_id>/<id>"}`
+> [!CAUTION]
+> This is a **write** command -- it creates a resource in the user's Dune account.
 
 ---
 
-## Required Workflow
+## viz get
+
+Retrieve detailed information about a visualization by its ID.
+
+```bash
+dune viz get <visualization_id> [flags]
+```
+
+### Arguments
+
+| Argument | Type | Description |
+|----------|------|-------------|
+| `visualization_id` | `integer` | The numeric ID of the visualization to fetch |
+
+### Flags
+
+| Flag | Type | Required | Default | Description |
+|------|------|----------|---------|-------------|
+| `-o, --output` | `string` | No | `text` | Output format: `text` or `json` |
+
+### Examples
+
+```bash
+# View a visualization's details
+dune viz get 12345 -o json
+
+# Inspect current options before updating
+dune viz get 12345 -o json | jq '.options'
+```
+
+---
+
+## viz list
+
+List all visualizations attached to a query.
+
+```bash
+dune viz list --query-id <ID> [flags]
+```
+
+### Flags
+
+| Flag | Type | Required | Default | Description |
+|------|------|----------|---------|-------------|
+| `--query-id` | `integer` | Yes | -- | ID of the query to list visualizations for |
+| `--limit` | `integer` | No | `25` | Maximum number of results to return |
+| `--offset` | `integer` | No | `0` | Number of results to skip |
+| `-o, --output` | `string` | No | `text` | Output format: `text` or `json` |
+
+### Examples
+
+```bash
+# List all visualizations for a query
+dune viz list --query-id 12345 -o json
+
+# Paginate through results
+dune viz list --query-id 12345 --limit 10 --offset 0 -o json
+dune viz list --query-id 12345 --limit 10 --offset 10 -o json
+```
+
+---
+
+## viz update
+
+Update an existing visualization. Fetches the current state first, applies only the provided changes, and preserves unchanged fields.
+
+```bash
+dune viz update <visualization_id> [flags]
+```
+
+### Arguments
+
+| Argument | Type | Description |
+|----------|------|-------------|
+| `visualization_id` | `integer` | The numeric ID of the visualization to update |
+
+### Flags
+
+| Flag | Type | Required | Default | Description |
+|------|------|----------|---------|-------------|
+| `--name` | `string` | No | -- | New visualization name (max 300 characters) |
+| `--type` | `string` | No | -- | New visualization type (see [Visualization Types](#visualization-types)) |
+| `--description` | `string` | No | -- | New description (max 1000 characters) |
+| `--options` | `string` | No | -- | New visualization options JSON (see [Options Format](#options-format)) |
+| `-o, --output` | `string` | No | `text` | Output format: `text` or `json` |
+
+At least one flag must be provided. Only the provided flags are updated; omitted fields remain unchanged.
+
+> **Important:** The `--options` flag replaces the **entire** options object, not individual fields within it. To change a single option field, first fetch the current options with `dune viz get <id> -o json`, modify the JSON, then pass the full updated object to `--options`.
+
+### Examples
+
+```bash
+# Rename a visualization
+dune viz update 12345 --name "New Chart Name" -o json
+
+# Change chart type and options
+dune viz update 12345 --type counter \
+  --options '{"counterColName":"count","rowNumber":1,"stringDecimal":0}' -o json
+
+# Update description only
+dune viz update 12345 --description "Updated weekly report chart" -o json
+```
+
+> [!CAUTION]
+> This is a **write** command -- it modifies an existing resource in the user's Dune account.
+
+---
+
+## viz delete
+
+Permanently delete a visualization. This action cannot be undone.
+
+```bash
+dune viz delete <visualization_id> [flags]
+```
+
+### Arguments
+
+| Argument | Type | Description |
+|----------|------|-------------|
+| `visualization_id` | `integer` | The numeric ID of the visualization to delete |
+
+### Flags
+
+| Flag | Type | Required | Default | Description |
+|------|------|----------|---------|-------------|
+| `-o, --output` | `string` | No | `text` | Output format: `text` or `json` |
+
+### Examples
+
+```bash
+# Delete a visualization
+dune viz delete 12345 -o json
+
+# List first, then delete
+dune viz list --query-id 12345 -o json
+dune viz delete <id-from-list> -o json
+```
+
+> [!CAUTION]
+> This is a **destructive** command -- it permanently deletes the visualization. There is no undelete. Use `dune viz get <id>` to inspect the visualization before deleting.
+
+---
+
+## Required Workflow (for creating visualizations)
 
 > **You MUST follow this workflow every time.** Skipping step 1 is the #1 cause of broken visualizations.
 >
@@ -87,6 +230,8 @@ Open the returned URL to confirm it renders correctly.
 ---
 
 ## Options Format
+
+> **Applies to:** `viz create --options` and `viz update --options`.
 
 > **Critical:** The `--options` JSON must match the visualization type. Column names in options must match the actual query result column names exactly. Omitting required fields or using wrong column names produces broken visualizations.
 
@@ -237,14 +382,13 @@ Use these in `numberFormat`, `stringPrefix`/`stringSuffix` fields:
 
 1. **Using a temporary query**: Visualizations only work on saved (non-temp) queries. If you created the query with `--temp`, recreate it without `--temp` before adding a visualization.
 2. **Not running the query first**: You MUST run `dune query run <id> -o json` first to discover actual column names from `result.metadata.column_names`. Never guess column names — `SELECT 1` produces `_col0`, `SELECT count(*) FROM x` produces `_col0`, etc. Only `SELECT x AS my_name` gives predictable names.
-2. **Empty options**: `--options '{}'` always produces a broken visualization that shows errors when opened
-3. **Wrong column names**: Column names in options must match query result columns exactly (case-sensitive)
-4. **Missing columnMapping**: Charts require `columnMapping` with at least one `"x"` and one `"y"` entry
-5. **Counter row number**: `rowNumber` is 1-based, not 0-based
-6. **Chart type vs globalSeriesType**: Use `--type chart` for all chart subtypes, then set `globalSeriesType` in options to `"line"`, `"column"`, `"area"`, `"scatter"`, or `"pie"`
-
-> [!CAUTION]
-> This is a **write** command -- it creates a resource in the user's Dune account.
+3. **Empty options**: `--options '{}'` always produces a broken visualization that shows errors when opened
+4. **Wrong column names**: Column names in options must match query result columns exactly (case-sensitive)
+5. **Missing columnMapping**: Charts require `columnMapping` with at least one `"x"` and one `"y"` entry
+6. **Counter row number**: `rowNumber` is 1-based, not 0-based
+7. **Chart type vs globalSeriesType**: Use `--type chart` for all chart subtypes, then set `globalSeriesType` in options to `"line"`, `"column"`, `"area"`, `"scatter"`, or `"pie"`
+8. **Deleting without checking first**: Always use `dune viz get <id>` or `dune viz list --query-id <id>` to verify the visualization before deleting. There is no undo.
+9. **Updating options without fetching first**: When changing `--options`, use `dune viz get <id> -o json` to see the current options format, then provide a complete replacement. The `--options` flag replaces the entire options object, not individual fields within it.
 
 ---
 

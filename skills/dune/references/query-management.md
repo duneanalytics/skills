@@ -210,3 +210,4 @@ dune query archive 12345 -o json
 
 - [query-execution.md](query-execution.md) -- Run queries and fetch execution results
 - [dataset-discovery.md](dataset-discovery.md) -- Search for tables before writing SQL
+- [visualization-management.md](visualization-management.md) -- Create and manage visualizations on saved queries
