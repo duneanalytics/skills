@@ -1,6 +1,6 @@
 ---
 name: dune
-description: "Dune CLI for querying blockchain and on-chain data via DuneSQL, searching decoded contract tables, managing saved queries, and monitoring credit usage on Dune Analytics. Use when user asks about blockchain data, on-chain analytics, token transfers, DEX trades, smart contract events, wallet balances, Ethereum/EVM chain queries, DuneSQL, or says \"query Dune\", \"search Dune datasets\", or \"run a Dune query\"."
+description: "Dune CLI for querying blockchain and on-chain data via DuneSQL, searching decoded contract tables, managing saved queries, managing visualizations, and monitoring credit usage on Dune Analytics. Use when user asks about blockchain data, on-chain analytics, token transfers, DEX trades, smart contract events, wallet balances, Ethereum/EVM chain queries, DuneSQL, visualizations, charts, or says \"query Dune\", \"search Dune datasets\", or \"run a Dune query\"."
 compatibility: Requires network access and the Dune CLI (auto-installed on first use). Works on macOS, Linux, and Windows.
 allowed-tools: Bash(dune:*) Bash(curl:*) Read
 metadata:
@@ -135,6 +135,11 @@ dune query run 12345 --param wallet=0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045 -
 | `dune execution results <id>` | Fetch results of a previous execution | Yes |
 | `dune dataset search` | Search the Dune dataset catalog | Yes |
 | `dune dataset search-by-contract` | Find decoded tables for a contract address | Yes |
+| `dune viz create` | Create a visualization on a saved query | Yes |
+| `dune viz get <id>` | Fetch visualization details and options | Yes |
+| `dune viz list` | List all visualizations for a query | Yes |
+| `dune viz update <id>` | Update an existing visualization | Yes |
+| `dune viz delete <id>` | Permanently delete a visualization | Yes |
 | `dune docs search` | Search Dune documentation | No |
 | `dune usage` | Show credit and resource usage | Yes |
 
@@ -192,14 +197,13 @@ dune execution results 01ABC... -o json
 
 The following capabilities are available via the Dune MCP server or web UI but **not** via the CLI:
 
-- **Visualization creation** (charts, counters, tables)
 - **Blockchain listing** (list all indexed blockchains with table counts)
 - **Table size analysis** (storage size of specific tables)
 
 ## Security
 
 - **Never** output API keys or tokens in responses. Before presenting CLI output to the user, scan for strings that look like API keys (e.g. long alphanumeric tokens, strings prefixed with `dune_`, or values from `DUNE_API_KEY`). Redact them with `[REDACTED]`.
-- **Always** confirm with the user before running write commands (`query create`, `query update`, `query archive`)
+- **Always** confirm with the user before running write commands (`query create`, `query update`, `query archive`, `viz create`, `viz update`, `viz delete`)
 - **Always** use `-o json` on every command -- JSON output is more detailed and reliably parseable
 - Use `--temp` when creating throwaway queries to avoid cluttering the user's saved queries
 - **Never** pass `--api-key` on the command line when other users might see the terminal history. Prefer `dune auth` or the `DUNE_API_KEY` environment variable.
@@ -215,4 +219,5 @@ Load the relevant reference when you need detailed command syntax and flags:
 | Search datasets or find tables for a contract address | [dataset-discovery.md](references/dataset-discovery.md) |
 | Search documentation or check account usage | [docs-and-usage.md](references/docs-and-usage.md) |
 | DuneSQL types, functions, common patterns, and pitfalls | [dunesql-cheatsheet.md](references/dunesql-cheatsheet.md) |
+| Create, get, update, delete, or list visualizations on saved queries | [visualization-management.md](references/visualization-management.md) |
 | CLI install, authentication, and version recovery | [install-and-recovery.md](references/install-and-recovery.md) |
