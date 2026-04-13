@@ -1,6 +1,6 @@
 ---
 name: dune
-description: "Dune CLI for querying blockchain and on-chain data via DuneSQL, searching decoded contract tables, managing saved queries, managing visualizations, and monitoring credit usage on Dune Analytics. Use when user asks about blockchain data, on-chain analytics, token transfers, DEX trades, smart contract events, wallet balances, Ethereum/EVM chain queries, DuneSQL, visualizations, charts, or says \"query Dune\", \"search Dune datasets\", or \"run a Dune query\"."
+description: "Dune CLI for querying blockchain and on-chain data via DuneSQL, searching decoded contract tables, managing saved queries, managing visualizations, managing dashboards, and monitoring credit usage on Dune. Use when user asks about blockchain data, on-chain analytics, token transfers, DEX trades, smart contract events, wallet balances, Ethereum/EVM chain queries, DuneSQL, visualizations, charts, dashboards, or says \"query Dune\", \"search Dune datasets\", \"run a Dune query\", \"create a dashboard\", or \"manage dashboard\"."
 compatibility: Requires network access and the Dune CLI (auto-installed on first use). Works on macOS, Linux, and Windows.
 allowed-tools: Bash(dune:*) Bash(curl:*) Read
 metadata:
@@ -142,6 +142,10 @@ dune query run 12345 --param wallet=0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045 -
 | `dune viz delete <id>` | Permanently delete a visualization | Yes |
 | `dune docs search` | Search Dune documentation | No |
 | `dune usage` | Show credit and resource usage | Yes |
+| `dune dashboard create` | Create a new dashboard | Yes |
+| `dune dashboard get <id>` | Fetch a dashboard's metadata and widgets | Yes |
+| `dune dashboard update <id>` | Update an existing dashboard | Yes |
+| `dune dashboard archive <id>` | Archive a dashboard | Yes |
 
 ## Common Workflows
 
@@ -193,6 +197,37 @@ dune query run 12345 --no-wait --performance large -o json
 dune execution results 01ABC... -o json
 ```
 
+### Build a Dashboard from Scratch
+
+```bash
+# 1. Create queries for each section
+QUERY_ID=$(dune query create --name "Daily Volume" --sql "SELECT date_trunc('day', block_time) AS day, SUM(amount) AS volume FROM trades GROUP BY 1 ORDER BY 1" -o json | jq -r '.query_id')
+
+# 2. Execute to verify data
+dune query run $QUERY_ID -o json
+
+# 3. Create visualizations for each query
+VIZ_ID=$(dune viz create --query-id $QUERY_ID --name "Daily Volume Chart" --type chart --options '{"globalSeriesType":"line","columnMapping":{"day":"x","volume":"y"}}' -o json | jq -r '.id')
+
+# 4. Assemble the dashboard
+dune dashboard create --name "Trading Dashboard" \
+  --text-widgets '[{"text":"# Trading Dashboard\nDaily volume and metrics"}]' \
+  --visualization-ids $VIZ_ID -o json
+```
+
+### Update a Dashboard (Preserve Existing Widgets)
+
+```bash
+# 1. Fetch current state
+dune dashboard get 12345 -o json > dashboard.json
+
+# 2. Modify as needed (add a new visualization widget)
+# 3. Pass the complete widget state back
+dune dashboard update 12345 \
+  --visualization-widgets '[{"visualization_id":111},{"visualization_id":222},{"visualization_id":333}]' \
+  -o json
+```
+
 ## Limitations
 
 The following capabilities are available via the Dune MCP server or web UI but **not** via the CLI:
@@ -203,7 +238,7 @@ The following capabilities are available via the Dune MCP server or web UI but *
 ## Security
 
 - **Never** output API keys or tokens in responses. Before presenting CLI output to the user, scan for strings that look like API keys (e.g. long alphanumeric tokens, strings prefixed with `dune_`, or values from `DUNE_API_KEY`). Redact them with `[REDACTED]`.
-- **Always** confirm with the user before running write commands (`query create`, `query update`, `query archive`, `viz create`, `viz update`, `viz delete`)
+- **Always** confirm with the user before running write commands (`query create`, `query update`, `query archive`, `viz create`, `viz update`, `viz delete`, `dashboard create`, `dashboard update`, `dashboard archive`)
 - **Always** use `-o json` on every command -- JSON output is more detailed and reliably parseable
 - Use `--temp` when creating throwaway queries to avoid cluttering the user's saved queries
 - **Never** pass `--api-key` on the command line when other users might see the terminal history. Prefer `dune auth` or the `DUNE_API_KEY` environment variable.
@@ -220,4 +255,5 @@ Load the relevant reference when you need detailed command syntax and flags:
 | Search documentation or check account usage | [docs-and-usage.md](references/docs-and-usage.md) |
 | DuneSQL types, functions, common patterns, and pitfalls | [dunesql-cheatsheet.md](references/dunesql-cheatsheet.md) |
 | Create, get, update, delete, or list visualizations on saved queries | [visualization-management.md](references/visualization-management.md) |
+| Create, get, update, or archive dashboards | [dashboard-management.md](references/dashboard-management.md) |
 | CLI install, authentication, and version recovery | [install-and-recovery.md](references/install-and-recovery.md) |
