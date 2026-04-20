@@ -125,7 +125,8 @@ Each Sim API request consumes compute units based on the complexity and number o
 | `dune sim evm collectibles <addr>` | ERC721/ERC1155 NFT holdings with spam filtering | Yes |
 | `dune sim evm token-info <addr>` | Token metadata, price, supply, market cap | Yes |
 | `dune sim evm token-holders <addr>` | Top holders of an ERC20 token ranked by balance | Yes |
-| `dune sim evm defi-positions <addr>` | DeFi positions across lending, AMM, vault protocols (beta) | Yes |
+| `dune sim evm defi-positions <addr>` | DeFi positions across lending, AMM, vault protocols | Yes |
+| `dune sim evm supported-protocols` | DeFi protocol families and chains supported by `defi-positions` | Yes |
 | `dune sim svm balances <addr>` | SPL token balances on Solana/Eclipse (beta) | Yes |
 | `dune sim svm transactions <addr>` | Solana transaction history (beta) | Yes |
 
@@ -229,6 +230,18 @@ dune sim evm defi-positions 0xd8da6bf26964af9d7eed9e03e53415d37aa96045 -o json
 
 # Restrict to Ethereum and Base
 dune sim evm defi-positions 0xd8da... --chain-ids 1,8453 -o json
+```
+
+### Discover DeFi Protocol Coverage
+
+Check which protocol families, sub-protocols, and chains are supported by `defi-positions` before querying a wallet:
+
+```bash
+# Stable protocols/chains only
+dune sim evm supported-protocols -o json
+
+# Include chains still in preview
+dune sim evm supported-protocols --include-preview-chains -o json
 ```
 
 ### Solana Wallet Lookup
