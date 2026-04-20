@@ -254,6 +254,7 @@ Load the relevant reference when you need detailed command syntax and flags:
 | Search datasets or find tables for a contract address | [dataset-discovery.md](references/dataset-discovery.md) |
 | Search documentation or check account usage | [docs-and-usage.md](references/docs-and-usage.md) |
 | DuneSQL types, functions, common patterns, and pitfalls | [dunesql-cheatsheet.md](references/dunesql-cheatsheet.md) |
+| Multi-chain supply tracking, Starknet events, Stellar state, fill-forward prices, incremental queries | [multichain-analytics.md](references/multichain-analytics.md) |
 | Create, get, update, delete, or list visualizations on saved queries | [visualization-management.md](references/visualization-management.md) |
 | Create, get, update, or archive dashboards | [dashboard-management.md](references/dashboard-management.md) |
 | CLI install, authentication, and version recovery | [install-and-recovery.md](references/install-and-recovery.md) |
