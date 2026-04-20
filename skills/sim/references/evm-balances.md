@@ -33,6 +33,7 @@ dune sim evm balances <address> [flags]
 | `--asset-class` | `string` | No | -- | Filter by asset classification: `stablecoin` |
 | `--metadata` | `string` | No | -- | Request additional fields (comma-separated): `logo`, `url`, `pools` |
 | `--exclude-spam` | `bool` | No | `false` | Exclude low-liquidity tokens (< $100 pool size) |
+| `--exclude-unpriced` | `bool` | No | `true` | Exclude tokens without a USD price. Pass `--exclude-unpriced=false` to include them. |
 | `--historical-prices` | `string` | No | -- | Include historical USD prices at hour offsets (e.g. `720,168,24` for 30d, 7d, 1d ago) |
 | `--limit` | `int` | No | server default | Max results per page (1-1000) |
 | `--offset` | `string` | No | -- | Pagination cursor from previous response's `next_offset` |
@@ -49,7 +50,7 @@ Use `-o json` to get the full structured response. The text table shows chain, s
 ### Examples
 
 ```bash
-# All token balances across default chains
+# All token balances across default chains (priced tokens only by default)
 dune sim evm balances 0xd8da6bf26964af9d7eed9e03e53415d37aa96045 -o json
 
 # Ethereum and Base only, exclude spam
@@ -60,6 +61,9 @@ dune sim evm balances 0xd8da... --filters erc20 --metadata logo -o json
 
 # Include historical prices (30d, 7d, 1d)
 dune sim evm balances 0xd8da... --historical-prices 720,168,24 -o json
+
+# Include tokens without a USD price (full token list, not just priced)
+dune sim evm balances 0xd8da... --exclude-unpriced=false -o json
 ```
 
 ---
@@ -131,6 +135,7 @@ Same as `evm balances` (except `--asset-class` which is automatically set to `st
 | `--filters` | `string` | No | -- | Token filter: `erc20` or `native` |
 | `--metadata` | `string` | No | -- | Additional fields: `logo`, `url`, `pools` |
 | `--exclude-spam` | `bool` | No | `false` | Exclude low-liquidity tokens |
+| `--exclude-unpriced` | `bool` | No | `true` | Exclude tokens without a USD price. Pass `--exclude-unpriced=false` to include them. |
 | `--historical-prices` | `string` | No | -- | Hour offsets for historical prices |
 | `--limit` | `int` | No | server default | Max results per page (1-1000) |
 | `--offset` | `string` | No | -- | Pagination cursor |
