@@ -31,7 +31,7 @@ dune query run <query-id> [flags]
 | Flag | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `--param` | `[]string` | No | -- | Query parameter as `key=value` (repeatable). Values are auto-typed by the API. |
-| `--performance` | `string` | No | `medium` | Performance tier: `medium` (standard) or `large` (higher compute, more credits) |
+| `--performance` | `string` | No | (auto) | Performance tier override: `free`, `medium`, or `large`. Omit unless the user asks, the query is complex, or a previous run timed out. |
 | `--limit` | `int` | No | `0` | Maximum rows to display (`0` = all rows) |
 | `--no-wait` | `bool` | No | `false` | Submit and exit immediately without waiting for results |
 | `-o, --output` | `string` | No | `text` | Output format: `text` or `json` |
@@ -97,7 +97,7 @@ dune query run-sql --sql <SQL> [flags]
 |------|------|----------|---------|-------------|
 | `--sql` | `string` | Yes | -- | DuneSQL query to execute |
 | `--param` | `[]string` | No | -- | Query parameter as `key=value` (repeatable). Values are auto-typed by the API. |
-| `--performance` | `string` | No | `medium` | Performance tier: `medium` (standard) or `large` (higher compute, more credits) |
+| `--performance` | `string` | No | (auto) | Performance tier override: `free`, `medium`, or `large`. Omit unless the user asks, the query is complex, or a previous run timed out. |
 | `--limit` | `int` | No | `0` | Maximum rows to display (`0` = all rows) |
 | `--no-wait` | `bool` | No | `false` | Submit and exit immediately without waiting for results |
 | `-o, --output` | `string` | No | `text` | Output format: `text` or `json` |

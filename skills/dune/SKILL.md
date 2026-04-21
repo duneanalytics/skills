@@ -74,12 +74,11 @@ Dune uses **DuneSQL**, a Trino-based SQL dialect, as its query engine. Key point
 
 ### Performance Tiers
 
-Query execution supports two tiers:
+Available tiers: `free`, `medium`, `large`. **Do not pass `--performance` by default** — omit it and the API auto-selects. Only provide it when:
 
-| Tier | Flag Value | Description |
-|------|-----------|-------------|
-| Medium | `medium` (default) | Standard compute resources. Suitable for most queries. |
-| Large | `large` | Higher compute resources. Use for complex queries, large joins, or heavy aggregations. Costs more credits. |
+- The user explicitly requests a tier
+- The query is clearly complex (heavy joins, large aggregations)
+- A previous run returned a timeout or resource-limit error
 
 ### Execution States
 
