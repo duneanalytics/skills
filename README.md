@@ -38,7 +38,6 @@ Skills are contextual and auto-loaded based on your conversation. When a request
 | Skill | Description |
 |-------|-------------|
 | [dune](skills/dune/) | Query blockchain data, search datasets, manage queries, and monitor usage via the Dune CLI |
-| [sim](skills/sim/) | Real-time blockchain wallet and token lookups via the Dune Sim API (balances, activity, transactions, NFTs, DeFi positions, token holders) |
 
 ## Skill Structure
 
@@ -59,7 +58,7 @@ skill-name/
 
 ## Adding a New Skill
 
-To add a new skill (e.g., `sim`, `dbt`):
+To add a new skill (e.g., `dbt`):
 
 1. Create a new directory under `skills/` matching your skill name
 2. Add a `SKILL.md` with required frontmatter:
