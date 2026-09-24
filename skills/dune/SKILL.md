@@ -1,6 +1,6 @@
 ---
 name: dune
-description: "Dune CLI for querying blockchain and on-chain data via DuneSQL, searching decoded contract tables, managing saved queries, managing visualizations, managing dashboards, and monitoring credit usage on Dune. Use when user asks about blockchain data, on-chain analytics, token transfers, DEX trades, smart contract events, wallet balances, Ethereum/EVM chain queries, DuneSQL, visualizations, charts, dashboards, or says \"query Dune\", \"search Dune datasets\", \"run a Dune query\", \"create a dashboard\", or \"manage dashboard\"."
+description: "Dune CLI for querying blockchain and on-chain data via DuneSQL, searching decoded contract tables, managing saved queries, managing visualizations, managing dashboards, managing materialized views, and monitoring credit usage on Dune. Use when user asks about blockchain data, on-chain analytics, token transfers, DEX trades, smart contract events, wallet balances, Ethereum/EVM chain queries, DuneSQL, visualizations, charts, dashboards, materialized views, matviews, or says \"query Dune\", \"search Dune datasets\", \"run a Dune query\", \"create a dashboard\", \"manage dashboard\", \"create a materialized view\", or \"refresh a matview\"."
 compatibility: Requires network access and the Dune CLI (auto-installed on first use). Works on macOS, Linux, and Windows.
 allowed-tools: Bash(dune:*) Bash(curl:*) Read
 metadata:
@@ -132,6 +132,12 @@ dune query run 12345 --param wallet=0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045 -
 | `dune query run <id>` | Execute a saved query and wait for results | Yes |
 | `dune query run-sql` | Execute raw DuneSQL directly (no saved query needed) | Yes |
 | `dune execution results <id>` | Fetch results of a previous execution | Yes |
+| `dune matview create` | Materialize a saved query into a table | Yes |
+| `dune matview get <name>` | Fetch a matview's metadata, size, and refresh schedule | Yes |
+| `dune matview list` | List the materialized views you own | Yes |
+| `dune matview update <name>` | Update a matview's settings or refresh schedule | Yes |
+| `dune matview refresh <name>` | Trigger an on-demand refresh | Yes |
+| `dune matview delete <name>` | Permanently delete a matview and its schedule | Yes |
 | `dune dataset search` | Search the Dune dataset catalog | Yes |
 | `dune dataset search-by-contract` | Find decoded tables for a contract address | Yes |
 | `dune viz create` | Create a visualization on a saved query | Yes |
@@ -237,7 +243,7 @@ The following capabilities are available via the Dune MCP server or web UI but *
 ## Security
 
 - **Never** output API keys or tokens in responses. Before presenting CLI output to the user, scan for strings that look like API keys (e.g. long alphanumeric tokens, strings prefixed with `dune_`, or values from `DUNE_API_KEY`). Redact them with `[REDACTED]`.
-- **Always** confirm with the user before running write commands (`query create`, `query update`, `query archive`, `viz create`, `viz update`, `viz delete`, `dashboard create`, `dashboard update`, `dashboard archive`)
+- **Always** confirm with the user before running write commands (`query create`, `query update`, `query archive`, `viz create`, `viz update`, `viz delete`, `dashboard create`, `dashboard update`, `dashboard archive`, `matview create`, `matview update`, `matview refresh`, `matview delete`). Note: `matview create`, `matview update`, and `matview refresh` each trigger a credit-consuming execution, and `matview delete` is irreversible.
 - **Always** use `-o json` on every command -- JSON output is more detailed and reliably parseable
 - Use `--temp` when creating throwaway queries to avoid cluttering the user's saved queries
 - **Never** pass `--api-key` on the command line when other users might see the terminal history. Prefer `dune auth` or the `DUNE_API_KEY` environment variable.
@@ -254,5 +260,6 @@ Load the relevant reference when you need detailed command syntax and flags:
 | Search documentation or check account usage | [docs-and-usage.md](references/docs-and-usage.md) |
 | DuneSQL types, functions, common patterns, and pitfalls | [dunesql-cheatsheet.md](references/dunesql-cheatsheet.md) |
 | Create, get, update, delete, or list visualizations on saved queries | [visualization-management.md](references/visualization-management.md) |
+| Create, get, list, update, refresh, or delete materialized views | [matview-management.md](references/matview-management.md) |
 | Create, get, update, or archive dashboards | [dashboard-management.md](references/dashboard-management.md) |
 | CLI install, authentication, and version recovery | [install-and-recovery.md](references/install-and-recovery.md) |
