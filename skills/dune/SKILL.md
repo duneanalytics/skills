@@ -200,13 +200,13 @@ dune execution results 01ABC... -o json
 
 ```bash
 # 1. Create queries for each section
-QUERY_ID=$(dune query create --name "Daily Volume" --sql "SELECT date_trunc('day', block_time) AS day, SUM(amount) AS volume FROM trades GROUP BY 1 ORDER BY 1" -o json | jq -r '.query_id')
+QUERY_ID=$(dune query create --name "Daily Volume" --sql "SELECT date_trunc('day', block_time) AS day, SUM(amount_usd) AS volume FROM dex.trades WHERE block_time >= NOW() - INTERVAL '30' DAY GROUP BY 1 ORDER BY 1" -o json | jq -r '.query_id')
 
 # 2. Execute to verify data
 dune query run $QUERY_ID -o json
 
 # 3. Create visualizations for each query
-VIZ_ID=$(dune viz create --query-id $QUERY_ID --name "Daily Volume Chart" --type chart --options '{"globalSeriesType":"line","columnMapping":{"day":"x","volume":"y"}}' -o json | jq -r '.id')
+VIZ_ID=$(dune viz create --query-id $QUERY_ID --name "Daily Volume Chart" --type chart --options '{"globalSeriesType":"line","sortX":true,"columnMapping":{"day":"x","volume":"y"},"seriesOptions":{"volume":{"type":"line","yAxis":0,"zIndex":0,"name":"Volume"}},"xAxis":{"title":{"text":"Day"}},"yAxis":[{"title":{"text":"Volume (USD)"}}],"legend":{"enabled":true},"series":{"stacking":null}}' -o json | jq -r '.id')
 
 # 4. Assemble the dashboard
 dune dashboard create --name "Trading Dashboard" \
