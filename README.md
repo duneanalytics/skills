@@ -37,7 +37,7 @@ Skills are contextual and auto-loaded based on your conversation. When a request
 
 | Skill | Description |
 |-------|-------------|
-| [dune](skills/dune/) | Query blockchain data, search datasets, manage queries, and monitor usage via the Dune CLI |
+| [dune](skills/dune/) | Query blockchain data, search datasets, and manage queries, charts, dashboards, folders, schedules and alerts, materialized views, contract decoding, and team runs via the Dune CLI |
 
 ## Skill Structure
 
